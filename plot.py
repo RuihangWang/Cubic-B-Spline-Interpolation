@@ -24,8 +24,8 @@ def plot():
 
     ax.plot(control_points_x, control_points_y, 'k--', marker='s',markerfacecolor='r', label='control points')
     ax.plot(data_points_x, data_points_y, ' ', marker='o', markerfacecolor='c', label='data points')
-    ax.plot(x, y, 'b-', lw=2, label='B-Spline')
-    ax.plot(spl_x(xx), spl_y(xx), 'g-', lw=1, label='B-Spline-example')
+    #ax.plot(x, y, 'b-', lw=2, label='B-Spline')
+    ax.plot(spl_x(xx), spl_y(xx), 'g-', lw=1, label='B-Spline')
     ax.grid(True)
     ax.legend(loc='best')
     plt.savefig(os.path.join(RESULT_PATH, OUT_FILENAME[0:-4]+'png'))
