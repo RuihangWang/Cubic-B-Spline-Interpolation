@@ -25,7 +25,7 @@ cd Cubic-B-Spline-Interpolation
 python main.py
 ```
 
-You can also test your own data points by modifying the ```config.py``` with corresponding .txt input file. Then, the program will output a cubic B-spline curve to ```\results``` in the following format:
+You can also test your own data points by modifying the ```config.py``` with corresponding .txt input file. Then, the program will output a cubic B-spline curve to ```/results``` in the following format:
 
 ```
 3

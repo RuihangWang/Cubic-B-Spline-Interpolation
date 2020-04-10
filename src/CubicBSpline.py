@@ -1,4 +1,5 @@
 import numpy as np
+from src.utils import log
 
 
 def euclidean_distance(d1, d2):
@@ -130,17 +131,19 @@ def tridiag_solver(a, b, c, d):
     return xc
 
 
-def parameterize(data_points, degree, type_='chord'):
+def parameterize(data_points, degree, type_='Chord'):
     """assign appropriate parameter values to data points
     :param data_points:
     :param degree:
     :param type_:
     :return:
     """
+    log("{} parameterization of data points".format(type_))
+
     n = len(data_points)
     t = [0.] * n
 
-    if type_ == 'chord':
+    if type_ == 'Chord':
         for i in range(1, n):
             numerator = 0
             denominator = 0
@@ -150,7 +153,7 @@ def parameterize(data_points, degree, type_='chord'):
                 denominator += euclidean_distance(data_points[k], data_points[k - 1])
             t[i] = numerator / denominator
 
-    elif type_ == 'uniform':
+    elif type_ == 'Uniform':
         for i in range(1, n):
             t[i] = 1. / n
 
@@ -170,11 +173,13 @@ def basis(params_list, knots_list):
     :param knots_list:
     :return: basis matrix
     """
+    log("Calculate B-Spline basis matrix")
+
     n = len(params_list) - 1
-    num_deboors = n + 3
+    cnt_num = n + 3  # control points
     params_array = np.asarray(params_list)
     knots_array = np.asarray(knots_list)
-    basis_mat = np.zeros((num_deboors, num_deboors))
+    basis_mat = np.zeros((cnt_num, cnt_num))
 
     for i in range(n + 1):
         for j in range(n + 3):
@@ -215,7 +220,43 @@ def solver(basis_mat, data_points):
     x_control = tridiag_solver(lower_diag, main_diag, upper_diag, x)
     y_control = tridiag_solver(lower_diag, main_diag, upper_diag, y)
 
+    log("Solve tri-diagnoal linear system")
+
     for i in range(n):
         control_points.append((x_control[i], y_control[i]))
 
     return control_points
+
+
+def B(x, k, i, t):
+    """recursive definition of B-Spline curve
+    :param x:
+    :param k:
+    :param i:
+    :param t:
+    :return:
+    """
+    if k == 0:
+        return 1.0 if t[i] <= x < t[i + 1] else 0.0
+    if t[i + k] == t[i]:
+        c1 = 0.0
+    else:
+        c1 = (x - t[i]) / (t[i + k] - t[i]) * B(x, k - 1, i, t)
+    if t[i + k + 1] == t[i + 1]:
+        c2 = 0.0
+    else:
+        c2 = (t[i + k + 1] - x) / (t[i + k + 1] - t[i + 1]) * B(x, k - 1, i + 1, t)
+    return c1 + c2
+
+
+def bspline(x, t, c, k):
+    """evaluate B-Spline curve
+    :param x:
+    :param t:
+    :param c:
+    :param k:
+    :return:
+    """
+    n = len(t) - k - 1
+    assert (n >= k + 1) and (len(c) >= n)
+    return sum(c[i] * B(x, k, i, t) for i in range(n))
