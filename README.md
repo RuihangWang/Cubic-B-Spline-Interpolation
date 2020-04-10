@@ -42,7 +42,7 @@ where “3” represents the degree of the B-spline curve, “cnt_num” is the 
 # Visualization
 To plot the interpolating curve, choose the output filename in ```config.py``` and run 
 the following command in the terminal:
-```angular2
+```
 python plot.py 
 ```
 The interpolating curves of the two example data points
