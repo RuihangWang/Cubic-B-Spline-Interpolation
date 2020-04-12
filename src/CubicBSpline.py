@@ -131,7 +131,7 @@ def tridiag_solver(a, b, c, d):
     return xc
 
 
-def parameterize(data_points, degree, type_='Chord'):
+def parameterize(data_points, degree, type_='chord'):
     """assign appropriate parameter values to data points
     :param data_points:
     :param degree:
@@ -143,7 +143,7 @@ def parameterize(data_points, degree, type_='Chord'):
     n = len(data_points)
     t = [0.] * n
 
-    if type_ == 'Chord':
+    if type_ == 'chord':
         for i in range(1, n):
             numerator = 0
             denominator = 0
@@ -153,9 +153,9 @@ def parameterize(data_points, degree, type_='Chord'):
                 denominator += euclidean_distance(data_points[k], data_points[k - 1])
             t[i] = numerator / denominator
 
-    elif type_ == 'Uniform':
+    elif type_ == 'uniform':
         for i in range(1, n):
-            t[i] = 1. / n
+            t[i] = i / n
 
     else:
         msg = "Parameterization method doesn't exist"

@@ -13,7 +13,7 @@ def cubicBSpline(filename, degree=3):
     # Read txt data point
     data_points, _, __ = read_in_txt(filename)
 
-    # Step 1: Parameterization
+    # Step 1: Parameterization (default: chord length)
     params_list, knots_list = parameterize(data_points, degree)
 
     # Step 2: Find the B-Spline curve

@@ -52,7 +52,7 @@ def save_out_txt(degree, control_points, knots_list, filename):
     :param filename:
     :return: degree, num of control points, knot sequence, x- and y-coordinates of the control points
     """
-    with open(os.path.join(RESULT_PATH, filename[:-4]+'out.txt'), "wt") as f:
+    with open(os.path.join(RESULT_PATH, filename[:-4]+'outuni.txt'), "wt") as f:
         f.write(str(degree)+'\n')
         f.write(str(len(control_points))+'\n')
         f.write('\n')
