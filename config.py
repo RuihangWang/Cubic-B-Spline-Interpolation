@@ -6,5 +6,5 @@ DATA_PATH = os.path.join(BASE_PATH, 'data')
 RESULT_PATH = os.path.join(BASE_PATH, 'results')
 SRC_PATH = os.path.join(BASE_PATH, 'src')
 
-IN_FILENAME = 'eg1.txt'
-OUT_FILENAME = 'eg1out.txt'
+IN_FILENAME = 'eg2.txt'
+OUT_FILENAME = 'eg2out.txt'

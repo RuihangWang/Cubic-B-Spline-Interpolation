@@ -1,11 +1,11 @@
 # Cubic-B-Spline-Interpolation
 
-This repo implements cubic B-spline interpolation with Python from scratch. If you are not familiar with B-Spline, you can click [here](https://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node17.html) to quickly grasp the knowledge.
+This repository implements the cubic B-spline interpolation with Python from scratch. If you are not familiar with B-Spline, you can click [here](https://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node17.html) to quickly grasp the knowledge.
 
 ### Requirements
-The only two requrired packages are Numpy for matrix operation and matplotlib for curve visualization.
+The only two requrired packages are NumPy for matrix operation and Matplotlib for curve visualization.
 
-* [Numpy 1.18.2](https://numpy.org/devdocs/release/1.18.0-notes.html)
+* [NumPy 1.18.2](https://numpy.org/devdocs/release/1.18.0-notes.html)
 * [Matplotlib 3.2.1](https://matplotlib.org)
 
 # Implementation
@@ -26,7 +26,7 @@ cd Cubic-B-Spline-Interpolation
 python main.py
 ```
 
-You can also test your own data points by modifying the ```config.py``` with corresponding .txt input file. Then, the program will output a cubic B-spline curve to ```/results``` in the following format:
+You can also test your own data points by modifying the ```config.py``` with corresponding ```.txt``` input file. Then, the program will output a cubic B-spline curve to ```/results``` in the following format:
 
 ```
 3
@@ -48,5 +48,5 @@ python plot.py
 The interpolating curves of the two example data points
 are shown as follow.
 
-![result pic](./results/eg1outpng.png)
-![result pic](./results/eg2outpng.png)
+![result pic](./results/eg1out.png)
+![result pic](./results/eg2out.png)
