@@ -3,7 +3,7 @@
 This repository implements the cubic B-spline interpolation in pure Python without Numpy or Scipy. If you are not familiar with B-Spline, you can click [here](https://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node17.html) to quickly grasp the knowledge.
 
 ### Requirements
-The only requrired packages is Matplotlib for B-spline curve visualization.
+The only requrired package is Matplotlib for B-spline curve visualization.
 
 * [Matplotlib 3.2.1](https://matplotlib.org)
 
