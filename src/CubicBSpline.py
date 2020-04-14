@@ -1,9 +1,8 @@
-import numpy as np
-from src.utils import log
+from src.utils import log, zeros_matrix
 
 
 def euclidean_distance(d1, d2):
-    """calculate the distance between two data points
+    """calculates the distance between two data points
     :param d1: points 1
     :param d2: points 2
     :return: distance between two points
@@ -11,12 +10,12 @@ def euclidean_distance(d1, d2):
     n = len(d1)
     sum_ = 0
     for i in range(n):
-        sum_ += np.square(d1[i] - d2[i])
-    return np.sqrt(sum_)
+        sum_ += (d1[i] - d2[i])**2
+    return (sum_)**0.5
 
 
 def set_knots(param_list, degree=3):
-    """Set the B-spline knots
+    """sets the B-spline knots
     :param param_list:
     :param degree:
     :return:
@@ -28,7 +27,7 @@ def set_knots(param_list, degree=3):
 
 
 def evaluate(t, u, i, j):
-    """evaluate the element of the N basis matrix
+    """evaluates the element of the N basis matrix
     :param t:
     :param u:
     :param i:
@@ -38,30 +37,39 @@ def evaluate(t, u, i, j):
     val = 0.
 
     if u[j] <= t[i] <= u[j + 1] and (t[i] != u[j] or t[i] != u[j + 1]):
-        val = (t[i] - u[j]) ** 3 / ((u[j + 1] - u[j]) * (u[j + 2] - u[j]) * (u[j + 3] - u[j]))
+        try:
+            val = (t[i] - u[j]) ** 3 / ((u[j + 1] - u[j]) * (u[j + 2] - u[j]) * (u[j + 3] - u[j]))
+        except ZeroDivisionError:
+            val = 0.
 
     elif u[j + 1] <= t[i] < u[j + 2]:
-        val = ((t[i] - u[j]) ** 2 * (u[j + 2] - t[i])) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j]) * (u[j + 2] - u[j])) + \
-            ((u[j + 3] - t[i]) * (t[i] - u[j]) * (t[i] - u[j + 1])) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
-            ((u[j + 4] - t[i]) * ((t[i] - u[j + 1]) ** 2)) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1]))
+        try:
+            val = ((t[i] - u[j]) ** 2 * (u[j + 2] - t[i])) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j]) * (u[j + 2] - u[j])) + \
+                  ((u[j + 3] - t[i]) * (t[i] - u[j]) * (t[i] - u[j + 1])) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
+                  ((u[j + 4] - t[i]) * ((t[i] - u[j + 1]) ** 2)) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1]))
+        except ZeroDivisionError:
+            val = 0.
 
     elif u[j + 2] <= t[i] < u[j + 3]:
-        val = ((t[i] - u[j]) * (u[j + 3] - t[i]) ** 2) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
-            ((u[j + 4] - t[i]) * (u[j + 3] - t[i]) * (t[i] - u[j + 1])) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1])) + \
-            ((u[j + 4] - t[i]) ** 2 * (t[i] - u[j + 2])) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        try:
+            val = ((t[i] - u[j]) * (u[j + 3] - t[i]) ** 2) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
+                  ((u[j + 4] - t[i]) * (u[j + 3] - t[i]) * (t[i] - u[j + 1])) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1])) + \
+                  ((u[j + 4] - t[i]) ** 2 * (t[i] - u[j + 2])) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        except ZeroDivisionError:
+            val = 0.
 
     elif u[j + 3] <= t[i] <= u[j + 4] and (t[i] != u[j + 3] or t[i] != u[j + 4]):
-        val = (u[j + 4] - t[i]) ** 3 / (
-                (u[j + 4] - u[j + 3]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
-
-    if np.isnan(val) or np.isinf(val):
-        val = 0.
+        try:
+            val = (u[j + 4] - t[i]) ** 3 / (
+                    (u[j + 4] - u[j + 3]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        except ZeroDivisionError:
+            val = 0.
 
     return val
 
@@ -77,30 +85,39 @@ def endpoints(t, u, i, j):
     val_ = 0.
 
     if u[j] <= t[i] <= u[j + 1] and (t[i] != u[j] or t[i] != u[j + 1]):
-        val_ = 6 * (t[i] - u[j]) / ((u[j + 1] - u[j]) * (u[j + 2] - u[j]) * (u[j + 3] - u[j]))
+        try:
+            val_ = 6 * (t[i] - u[j]) / ((u[j + 1] - u[j]) * (u[j + 2] - u[j]) * (u[j + 3] - u[j]))
+        except ZeroDivisionError:
+            val_ = 0.
 
     elif u[j + 1] <= t[i] <= u[j + 2] and (t[i] != u[j + 1] or t[i] != u[j + 2]):
-        val_ = (2 * (u[j + 2] - t[i]) - 4 * (t[i] - u[j])) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j]) * (u[j + 2] - u[j])) + \
-             (2 * u[j] - 6 * t[i] + 2 * u[j + 1] + 2 * u[j + 3]) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
-             (4 * u[j + 1] - 6 * t[i] + 2 * u[j + 4]) / (
-                (u[j + 2] - u[j + 1]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1]))
+        try:
+            val_ = (2 * (u[j + 2] - t[i]) - 4 * (t[i] - u[j])) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j]) * (u[j + 2] - u[j])) + \
+                   (2 * u[j] - 6 * t[i] + 2 * u[j + 1] + 2 * u[j + 3]) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
+                   (4 * u[j + 1] - 6 * t[i] + 2 * u[j + 4]) / (
+                    (u[j + 2] - u[j + 1]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1]))
+        except ZeroDivisionError:
+            val_ = 0.
 
     elif u[j + 2] <= t[i] <= u[j + 3] and (t[i] != u[j + 2] or t[i] != u[j + 3]):
-        val_ = (6 * t[i] - 2 * u[j] - 4 * u[j + 3]) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
-             (6 * t[i] - 2 * u[j + 1] - 2 * u[j + 3] - 2 * u[j + 4]) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1])) + \
-             (6 * t[i] - 2 * u[j + 2] - 4 * u[j + 4]) / (
-                (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        try:
+            val_ = (6 * t[i] - 2 * u[j] - 4 * u[j + 3]) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 3] - u[j + 1]) * (u[j + 3] - u[j])) + \
+                   (6 * t[i] - 2 * u[j + 1] - 2 * u[j + 3] - 2 * u[j + 4]) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 1]) * (u[j + 3] - u[j + 1])) + \
+                   (6 * t[i] - 2 * u[j + 2] - 4 * u[j + 4]) / (
+                    (u[j + 3] - u[j + 2]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        except ZeroDivisionError:
+            val_ = 0.
 
     elif u[j + 3] <= t[i] <= u[j + 4] and (t[i] != u[j + 3] or t[i] != u[j + 4]):
-        val_ = 6 * (u[j + 4] - t[i]) / (
-                (u[j + 4] - u[j + 3]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
-
-    if np.isnan(val_) or np.isinf(val_):
-        val_ = 0.
+        try:
+            val_ = 6 * (u[j + 4] - t[i]) / (
+                    (u[j + 4] - u[j + 3]) * (u[j + 4] - u[j + 2]) * (u[j + 4] - u[j + 1]))
+        except ZeroDivisionError:
+            val_ = 0.
 
     return val_
 
@@ -116,7 +133,7 @@ def tridiag_solver(a, b, c, d):
     :return: solution of the system
     """
     nf = len(d)
-    ac, bc, cc, dc = map(np.array, (a, b, c, d))
+    ac, bc, cc, dc = map(list, (a, b, c, d))
     for it in range(1, nf):
         mc = ac[it-1]/bc[it-1]
         bc[it] = bc[it] - mc*cc[it-1]
@@ -132,7 +149,7 @@ def tridiag_solver(a, b, c, d):
 
 
 def parameterize(data_points, degree, type_='chord'):
-    """assign appropriate parameter values to data points
+    """assigns appropriate parameter values to data points
     :param data_points:
     :param degree:
     :param type_:
@@ -177,16 +194,14 @@ def basis(params_list, knots_list):
 
     n = len(params_list) - 1
     cnt_num = n + 3  # control points
-    params_array = np.asarray(params_list)
-    knots_array = np.asarray(knots_list)
-    basis_mat = np.zeros((cnt_num, cnt_num))
+    basis_mat = zeros_matrix(cnt_num, cnt_num)
 
     for i in range(n + 1):
         for j in range(n + 3):
-            basis_mat[i + 1][j] = evaluate(params_array, knots_array, i, j)
+            basis_mat[i + 1][j] = evaluate(params_list, knots_list, i, j)
     for i in range(2):
         for j in range(n + 3):
-            basis_mat[i * (n + 2)][j] = endpoints(params_array, knots_array, i * n, j)
+            basis_mat[i * (n + 2)][j] = endpoints(params_list, knots_list, i * n, j)
 
     return basis_mat
 
@@ -198,24 +213,24 @@ def solver(basis_mat, data_points):
     :return: a list of control points of the B-Spline
     """
     control_points = []
-    n = basis_mat.shape[0]
+    n = len(basis_mat[0])
     d0 = [(0, 0)]
     appended_data_points = d0 + data_points + d0
-    x = np.asarray(appended_data_points)[:, 0]
-    y = np.asarray(appended_data_points)[:, 1]
+    x = [each[0] for each in appended_data_points]
+    y = [each[1] for each in appended_data_points]
 
     # swap the 1st and 2nd rows, the n - 1 and n rows
-    basis_mat[[0, 1]] = basis_mat[[1, 0]]
-    basis_mat[[n - 2, n - 1]] = basis_mat[[n - 1, n - 2]]
-    x[[0, 1]] = x[[1, 0]]
-    x[[n - 2, n - 1]] = x[[n - 1, n - 2]]
-    y[[0, 1]] = y[[1, 0]]
-    y[[n - 2, n - 1]] = y[[n - 1, n - 2]]
+    basis_mat[0], basis_mat[1] = basis_mat[1], basis_mat[0]
+    basis_mat[n - 2], basis_mat[n - 1] = basis_mat[n - 1], basis_mat[n - 2]
+    x[0], x[1] = x[1], x[0]
+    x[n - 2], x[n - 1] = x[n - 1], x[n - 2]
+    y[0], y[1] = y[1], y[0]
+    y[n - 2], y[n - 1] = y[n - 1], y[n - 2]
 
     # extract diagonal
-    lower_diag = np.diag(basis_mat, k=-1)
-    main_diag = np.diag(basis_mat)
-    upper_diag = np.diag(basis_mat, k=1)
+    lower_diag = [basis_mat[i + 1][i] for i in range(n - 1)]
+    main_diag = [basis_mat[i][i] for i in range(n)]
+    upper_diag = [basis_mat[i][i + 1] for i in range(n - 1)]
 
     x_control = tridiag_solver(lower_diag, main_diag, upper_diag, x)
     y_control = tridiag_solver(lower_diag, main_diag, upper_diag, y)

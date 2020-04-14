@@ -1,11 +1,10 @@
 # Cubic-B-Spline-Interpolation
 
-This repository implements the cubic B-spline interpolation with Python from scratch. If you are not familiar with B-Spline, you can click [here](https://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node17.html) to quickly grasp the knowledge.
+This repository implements the cubic B-spline interpolation in pure Python without Numpy or Scipy. If you are not familiar with B-Spline, you can click [here](https://web.mit.edu/hyperbook/Patrikalakis-Maekawa-Cho/node17.html) to quickly grasp the knowledge.
 
 ### Requirements
-The only two requrired packages are NumPy for matrix operation and Matplotlib for curve visualization.
+The only requrired packages is Matplotlib for B-spline curve visualization.
 
-* [NumPy 1.18.2](https://numpy.org/devdocs/release/1.18.0-notes.html)
 * [Matplotlib 3.2.1](https://matplotlib.org)
 
 # Implementation
@@ -45,8 +44,10 @@ the following command in the terminal:
 ```
 python plot.py 
 ```
-The interpolating curves of the two example data points
+The interpolating curves of the two example set of data points
 are shown as follow.
 
 ![result pic](./results/eg1out.png)
 ![result pic](./results/eg2out.png)
+
+Enjoy yourself!

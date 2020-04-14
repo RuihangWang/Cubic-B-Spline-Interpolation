@@ -1,5 +1,4 @@
 import os
-import numpy as np
 import matplotlib.pyplot as plt
 from src.cubicBSpline import bspline
 from src.utils import read_in_txt, read_out_txt
@@ -10,7 +9,7 @@ def plot():
     data_points, data_points_x, data_points_y = read_in_txt(IN_FILENAME)
     degree, cnt_num, knots_list, control_points_x, control_points_y = read_out_txt(OUT_FILENAME)
 
-    xx = np.linspace(0.01, 0.99, 100)
+    xx = [x/100 for x in list(range(0,100,1))]
 
     fig, ax = plt.subplots()
     x = [bspline(x, knots_list, control_points_x, degree) for x in xx]

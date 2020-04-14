@@ -66,5 +66,19 @@ def save_out_txt(degree, control_points, knots_list, filename):
     log("Export cubic B-Spline file successfully")
 
 
+def zeros_matrix(rows, cols):
+    """creates a matrix filled with zeros.
+    :param rows: the number of rows the matrix should have
+    :param cols: the number of columns the matrix should have
+    :return: list of lists that form the matrix
+    """
+    M = []
+    while len(M) < rows:
+        M.append([])
+        while len(M[-1]) < cols:
+            M[-1].append(0.0)
+
+    return M
+
 def log(*args, **kwargs):
     print('log:', *args, **kwargs)
